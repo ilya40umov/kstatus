@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+echo "$(date) Creating environment"
+docker-compose up --build -d
+
+echo "$(date) Creating database/user in MySQL using Terraform..."
+docker-compose -f docker-compose.yaml -f docker-compose.tasks.yaml run terraform-mysql
+echo -e "$(date) \033[32m done\033[m"
+
+echo "$(date) Applying Terraform configuration to Localstack..."
+docker-compose -f docker-compose.yaml -f docker-compose.tasks.yaml run terraform-localstack
+echo -e "$(date) \033[32m done\033[m"

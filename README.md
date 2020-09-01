@@ -26,11 +26,14 @@ while keeping in mind a future deployment to AWS.
 - [x] Set-up Kodein
 - [x] Set up Micrometer & Prometheus
 - [x] Configuration via YAML
-- [ ] docker-compose with dependencies
-- [ ] terraform for localstack resources
-- [ ] Makefile (with up, down, run, ci commands)
-- [ ] openapi.yaml with API endpoints
-- [ ] Implement endpoints from OpenAPI spec
+- [x] docker-compose with dependencies
+- [x] terraform for localstack resources
+- [x] Makefile (with up, down, run, ci commands)
+- [x] openapi.yaml with API endpoints
+- [x] Implement endpoints from OpenAPI spec
+- [ ] Implement repository layer using jasync
+- [ ] Implement an mvp for scheduler
+- [ ] Implement an mvp for worker
 - [ ] At least one test using kotest
 - [ ] At least one test using mockk
 - [ ] At least one test for db layer

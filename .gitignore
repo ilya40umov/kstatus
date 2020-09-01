@@ -27,3 +27,12 @@ hs_err_pid*
 
 # Ignore Gradle build output directory
 build
+
+# Terraform-generated
+.terraform
+*.tfstate
+*.tfstate.backup
+*.lock.info
+
+# Localstack
+.localstack

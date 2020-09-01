@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function teardown() {
+  if [[ $? -gt 0 ]]; then
+    echo -e "\033[31mERROR\033[m: CI pipeline has failed!"
+  fi
+  ./environment/bin/kstatus_env_down
+}
+trap teardown EXIT
+
+./environment/bin/kstatus_env_up
+
+export GRADLE_OPTS="-Dorg.gradle.daemon=false"
+./gradlew clean build

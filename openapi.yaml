@@ -1,0 +1,297 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: KStatus API
+  description:
+    Provides CRUD operations on sites that should be monitored.
+  contact:
+    email: illia.sorokoumov@gmail.com
+
+servers:
+  - url: http://localhost:8080/api/v1/
+
+tags:
+  - name: Site API
+    description: API endpoints that are operating on sites.
+
+paths:
+  /sites:
+    get:
+      summary: List all sites.
+      tags: [Site API]
+      parameters:
+        - name: limit
+          in: query
+          description: How many records to return. Defaults to 10.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: offset
+          in: query
+          description: Offset used for pagination together with 'limit'. Defaults to 0.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: Payload containing an array of sites.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/SiteList"
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+    post:
+      summary: Create a new site record.
+      tags: [Site API]
+      requestBody:
+        description: Site to be created.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Site"
+      responses:
+        '201':
+          description: Response containing the created site.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Site"
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+  /sites/{siteId}:
+    get:
+      summary: Retrieve a site by ID.
+      tags: [Site API]
+      parameters:
+        - name: siteId
+          in: path
+          description: ID of the site to be returned.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: The requested site.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Site"
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+    put:
+      summary: Update a site by ID.
+      tags: [Site API]
+      parameters:
+        - name: siteId
+          in: path
+          description: ID of the site to be updated.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        description: Site to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Site"
+      responses:
+        '200':
+          description: Response containing the updated site.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Site"
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+    delete:
+      summary: Delete a site by ID.
+      tags: [Site API]
+      parameters:
+        - name: siteId
+          in: path
+          description: ID of the site to be deleted.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: The deleted site.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Site"
+        '400':
+          $ref: "#/components/responses/BadRequestError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+
+
+components:
+  schemas:
+    NullValue:
+      not:
+        anyOf:
+          - type: string
+          - type: number
+          - type: boolean
+          - type: object
+          - type: array
+    StatusCheckResult:
+      description: Result of a status check.
+      type: string
+      enum:
+        - UP
+        - DOWN
+    Site:
+      type: object
+      properties:
+        siteId:
+          type: integer
+          format: int64
+          nullable: true
+          example: 123
+        url:
+          type: string
+          format: uri
+          example: http://www.google.com
+        createdAt:
+          type: string
+          format: date-time
+        checkIntervalSeconds:
+          type: integer
+          format: int64
+          example: 60
+          minimum: 60
+          maximum: 86400
+        lastCheckedAt:
+          type: string
+          format: date-time
+          nullable: true
+        lastStatusCheckResult:
+          oneOf:
+            - $ref: "#/components/schemas/NullValue"
+            - $ref: "#/components/schemas/StatusCheckResult"
+          example: UP
+        nextScheduledFor:
+          type: string
+          format: date-time
+          nullable: true
+        lastEnqueuedAt:
+          type: string
+          format: date-time
+          nullable: true
+    SiteList:
+      type: object
+      required: [sites]
+      properties:
+        sites:
+          type: array
+          items:
+            $ref: "#/components/schemas/Site"
+        offset:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+    FieldError:
+      type: object
+      required: [object, field, rejectedValue, message]
+      properties:
+        object:
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/NullValue"
+        field:
+          type: string
+        rejectedValue:
+          anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+            - type: array
+            - type: object
+            - $ref: "#/components/schemas/NullValue"
+        message:
+          type: string
+    ApiError:
+      type: object
+      required: [status, message]
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: "#/components/schemas/FieldError"
+    ErrorPayload:
+      type: object
+      required: [error]
+      properties:
+        error:
+          $ref: "#/components/schemas/ApiError"
+  responses:
+    BadRequestError:
+      description: Client request is invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorPayload"
+          example:
+            error:
+              status: 400
+              message: "Required parameter 'xyz' can not be null"
+              fieldErrors:
+                - object: site
+                  field: xyz
+                  rejectedValue: null
+                  message: '"xyz" must not be null'
+    NotFoundError:
+      description: Requested record not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorPayload"
+          example:
+            error:
+              status: 404
+              message: Requested record not found

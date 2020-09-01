@@ -12,6 +12,7 @@ dependencies {
     api("io.ktor:ktor-client-apache")
     api("io.ktor:ktor-client-serialization-jvm")
     api("com.sksamuel.hoplite:hoplite-yaml")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-core")
     implementation("org.apache.logging.log4j:log4j-core")
     runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl")
 }

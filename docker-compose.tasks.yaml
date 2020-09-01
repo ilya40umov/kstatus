@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  terraform-localstack:
+    image: hashicorp/terraform:0.12.29
+    entrypoint: ''
+    command: ./wait-and-apply.sh
+    working_dir: /opt/tf-localstack
+    volumes:
+      - ./environment/tf-localstack:/opt/tf-localstack
+    depends_on:
+      - localstack
+  terraform-mysql:
+    image: hashicorp/terraform:0.12.29
+    entrypoint: ''
+    command: ./wait-and-apply.sh
+    working_dir: /opt/tf-mysql
+    volumes:
+      - ./environment/tf-mysql:/opt/tf-mysql
+    depends_on:
+      - mysql

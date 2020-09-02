@@ -19,3 +19,10 @@ services:
       - ./environment/tf-mysql:/opt/tf-mysql
     depends_on:
       - mysql
+  flyway-migrate:
+    image: flyway/flyway:6.5.5
+    command: -url=jdbc:mysql://mysql -schemas=kstatus -user=kstatus -password=kstatus123 -connectRetries=60 migrate
+    volumes:
+      - ./flyway/migrations:/flyway/sql
+    depends_on:
+      - mysql

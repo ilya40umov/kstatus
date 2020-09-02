@@ -1,2 +1,8 @@
 ktor:
   shutdownTimeoutSeconds: 10
+
+database:
+  host: localhost
+  database: kstatus
+  username: kstatus
+  password: kstatus123

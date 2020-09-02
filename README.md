@@ -1,7 +1,6 @@
 # KStatus
 
-This is a demo project that aims to implement functionality 
-of tracking availability of given URLs over time.
+This is a demo project that handles monitoring of the availability of web pages.
 The main goal of this project is to try the technologies mentioned below, 
 while keeping in mind a future deployment to AWS.
 
@@ -31,7 +30,8 @@ while keeping in mind a future deployment to AWS.
 - [x] Makefile (with up, down, run, ci commands)
 - [x] openapi.yaml with API endpoints
 - [x] Implement endpoints from OpenAPI spec
-- [ ] Implement repository layer using jasync
+- [x] Set up database migrations using FlyWay
+- [x] Implement repository layer using jasync
 - [ ] Implement an mvp for scheduler
 - [ ] Implement an mvp for worker
 - [ ] At least one test using kotest

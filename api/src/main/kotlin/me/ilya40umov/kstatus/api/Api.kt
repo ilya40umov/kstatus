@@ -1,5 +1,8 @@
 package me.ilya40umov.kstatus.api
 
+import com.github.jasync.sql.db.mysql.MySQLConnection
+import com.github.jasync.sql.db.mysql.MySQLConnectionBuilder
+import com.github.jasync.sql.db.pool.ConnectionPool
 import com.sksamuel.hoplite.ConfigLoader
 import io.ktor.application.ApplicationStarted
 import io.ktor.server.engine.addShutdownHook
@@ -14,6 +17,7 @@ import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import me.ilya40umov.kstatus.api.ktor.withBaseApiModules
 import me.ilya40umov.kstatus.api.routes.apiV1Sites
+import me.ilya40umov.kstatus.conf.asPoolConfigBuilder
 import me.ilya40umov.kstatus.metrics.withMetricsModule
 import me.ilya40umov.kstatus.site.SiteRepository
 import me.ilya40umov.kstatus.site.SiteService
@@ -42,7 +46,11 @@ private fun loadConfig() =
 private fun createDi(apiConfig: ApiConfig) = DI {
     bind<ApiConfig>() with instance(apiConfig)
     bind<MeterRegistry>() with singleton { PrometheusMeterRegistry(PrometheusConfig.DEFAULT) }
-    bind<SiteRepository>() with singleton { SiteRepository() }
+    bind<ConnectionPool<MySQLConnection>>() with singleton {
+        val config = apiConfig.database.asPoolConfigBuilder().build()
+        MySQLConnectionBuilder.createConnectionPool(config)
+    }
+    bind<SiteRepository>() with singleton { SiteRepository(instance()) }
     bind<SiteService>() with singleton { SiteService(instance()) }
 }.also {
     logger.info { "DI container created." }

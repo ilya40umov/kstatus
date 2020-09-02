@@ -21,7 +21,9 @@ fun Application.apiV1Sites(di: DI) {
     routing {
         route("/api/v1/sites") {
             get {
-                call.respond(mapOf("data" to siteService.listAll(0, 1)))
+                val limit = call.parameters["limit"]?.toIntOrNull() ?: 10
+                val offset = call.parameters["offset"]?.toIntOrNull() ?: 0
+                call.respond(mapOf("data" to siteService.listAll(offset, limit)))
             }
             post {
                 val receivedSite = call.receive<Site>()

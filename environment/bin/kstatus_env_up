@@ -8,6 +8,10 @@ echo "$(date) Creating database/user in MySQL using Terraform..."
 docker-compose -f docker-compose.yaml -f docker-compose.tasks.yaml run terraform-mysql
 echo -e "$(date) \033[32m done\033[m"
 
+echo "$(date) Applying database migrations..."
+docker-compose -f docker-compose.yaml -f docker-compose.tasks.yaml run flyway-migrate
+echo -e "$(date) \033[32m done\033[m"
+
 echo "$(date) Applying Terraform configuration to Localstack..."
 docker-compose -f docker-compose.yaml -f docker-compose.tasks.yaml run terraform-localstack
 echo -e "$(date) \033[32m done\033[m"

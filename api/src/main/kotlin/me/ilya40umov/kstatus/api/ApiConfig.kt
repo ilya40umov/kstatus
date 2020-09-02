@@ -1,7 +1,10 @@
 package me.ilya40umov.kstatus.api
 
+import me.ilya40umov.kstatus.conf.DatabaseConfig
+
 data class ApiConfig(
-    val ktor: KtorConfig
+    val ktor: KtorConfig,
+    val database: DatabaseConfig
 )
 
 data class KtorConfig(

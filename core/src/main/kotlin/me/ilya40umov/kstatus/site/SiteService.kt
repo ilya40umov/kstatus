@@ -1,25 +1,26 @@
 package me.ilya40umov.kstatus.site
 
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class SiteService(
     private val repository: SiteRepository
 ) {
 
-    fun listAll(offset: Int, limit: Int): SiteList {
+    suspend fun listAll(offset: Int, limit: Int): SiteList {
         return SiteList(
             sites = repository.listAll(offset, limit),
             offset = offset,
-            totalCount = 1
+            totalCount = 1 // TODO calculate total count
         )
     }
 
-    fun findById(siteId: Int): Site? {
+    suspend fun findById(siteId: Int): Site? {
         return repository.findById(siteId)
     }
 
-    fun create(site: Site): Site {
-        return repository.insert(
+    suspend fun create(site: Site): Site {
+        val siteId = repository.insert(
             Site(
                 siteId = 0,
                 url = site.url,
@@ -31,20 +32,24 @@ class SiteService(
                 lastEnqueuedAt = null
             )
         )
+        return repository.findById(siteId)
+            ?: throw RuntimeException("Failed to look up the inserted record with ID $siteId")
     }
 
-    fun update(siteId: Int, site: Site): Site? {
+    suspend fun update(siteId: Int, site: Site): Site? {
         val siteToUpdate = repository.findById(siteId) ?: return null
-        return repository.update(
-            siteToUpdate.copy(
-                url = site.url,
-                checkIntervalSeconds = site.checkIntervalSeconds,
-                nextScheduledFor = site.nextScheduledFor
-            )
+        val updatedSite = siteToUpdate.copy(
+            url = site.url,
+            checkIntervalSeconds = site.checkIntervalSeconds,
+            nextScheduledFor = site.nextScheduledFor
         )
+        repository.update(updatedSite)
+        return updatedSite
     }
 
-    fun deleteById(siteId: Int): Site? {
-        return repository.delete(siteId)
+    suspend fun deleteById(siteId: Int): Site? {
+        return repository.findById(siteId)?.also {
+            repository.delete(siteId)
+        }
     }
 }

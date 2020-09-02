@@ -1,5 +1,6 @@
 package me.ilya40umov.kstatus.worker
 
 fun main() {
-    println("Running Worker...")
+    // TODO keep polling SQS for work,
+    //  upon recieval of a message, check the site and update data in DB
 }

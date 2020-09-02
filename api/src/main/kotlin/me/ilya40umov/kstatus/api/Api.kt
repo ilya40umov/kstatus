@@ -12,9 +12,9 @@ import io.ktor.util.KtorExperimentalAPI
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import me.ilya40umov.kstatus.api.site.SiteController
-import me.ilya40umov.kstatus.api.site.siteRoutes
-import me.ilya40umov.kstatus.metrics.metricsModule
+import me.ilya40umov.kstatus.api.ktor.withBaseApiModules
+import me.ilya40umov.kstatus.api.routes.apiV1Sites
+import me.ilya40umov.kstatus.metrics.withMetricsModule
 import me.ilya40umov.kstatus.site.SiteRepository
 import me.ilya40umov.kstatus.site.SiteService
 import mu.KotlinLogging
@@ -44,23 +44,21 @@ private fun createDi(apiConfig: ApiConfig) = DI {
     bind<MeterRegistry>() with singleton { PrometheusMeterRegistry(PrometheusConfig.DEFAULT) }
     bind<SiteRepository>() with singleton { SiteRepository() }
     bind<SiteService>() with singleton { SiteService(instance()) }
-    bind<SiteController>() with singleton { SiteController(instance()) }
 }.also {
     logger.info { "DI container created." }
 }
 
-class Api(di: DI) {
+class Api(private val di: DI) {
     private val conf: ApiConfig by di.instance()
     private val meterRegistry: MeterRegistry by di.instance()
-    private val siteController: SiteController by di.instance()
 
     @KtorExperimentalAPI
     fun start() {
         val env = applicationEngineEnvironment {
             module {
-                baseApiModules()
-                metricsModule(meterRegistry, conf.ktor.metricsPort)
-                siteRoutes(siteController)
+                withBaseApiModules()
+                withMetricsModule(meterRegistry, conf.ktor.metricsPort)
+                apiV1Sites(di)
                 environment.monitor.subscribe(ApplicationStarted) {
                     logger.info { "Api started." }
                 }

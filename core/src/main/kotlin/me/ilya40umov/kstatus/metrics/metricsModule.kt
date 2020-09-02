@@ -14,7 +14,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import me.ilya40umov.kstatus.Messages
 
-fun Application.metricsModule(meterRegistry: MeterRegistry, metricsPort: Int) {
+fun Application.withMetricsModule(meterRegistry: MeterRegistry, metricsPort: Int) {
     install(MicrometerMetrics) {
         registry = meterRegistry
     }

@@ -1,4 +1,4 @@
-package me.ilya40umov.kstatus.api
+package me.ilya40umov.kstatus.api.ktor
 
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -21,7 +21,7 @@ import io.ktor.serialization.json
 import me.ilya40umov.kstatus.Messages
 import org.slf4j.event.Level
 
-fun Application.baseApiModules() {
+fun Application.withBaseApiModules() {
     install(ContentNegotiation) {
         json()
     }

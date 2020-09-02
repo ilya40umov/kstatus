@@ -32,6 +32,7 @@ while keeping in mind a future deployment to AWS.
 - [x] Implement endpoints from OpenAPI spec
 - [x] Set up database migrations using FlyWay
 - [x] Implement repository layer using jasync
+- [ ] Add error handling to the API
 - [ ] Implement an mvp for scheduler
 - [ ] Implement an mvp for worker
 - [x] At least one test using kotest
@@ -39,6 +40,7 @@ while keeping in mind a future deployment to AWS.
 - [x] At least one test for db layer
 - [ ] At least one test for API (using mock server)
 - [ ] At least one integration test for API
+- [ ] At least one test validating API responses against OpenAPI spec
 - [ ] At least one integration test for the scheduler (writing to SQS)
 - [ ] At least one integration test for the worker (reading from SQS)
 

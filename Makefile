@@ -15,3 +15,6 @@ down:
 
 ci:
 	./environment/bin/kstatus_ci
+
+swagger-ui:
+	docker-compose -f docker-compose.yaml -f docker-compose.tasks.yaml up -d swagger-ui

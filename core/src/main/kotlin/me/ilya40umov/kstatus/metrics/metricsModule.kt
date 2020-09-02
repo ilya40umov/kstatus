@@ -26,7 +26,7 @@ fun Application.withMetricsModule(meterRegistry: MeterRegistry, metricsPort: Int
                         meterRegistry.scrape()
                     }
                 } else {
-                    call.respond(status = HttpStatusCode.NotFound, Messages.PAGE_NOT_FOUND_MESSAGE)
+                    call.respond(status = HttpStatusCode.NotFound, Messages.NOT_FOUND_MESSAGE)
                 }
             }
         }

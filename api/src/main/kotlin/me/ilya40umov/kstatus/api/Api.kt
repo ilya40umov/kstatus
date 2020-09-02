@@ -16,8 +16,10 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import me.ilya40umov.kstatus.api.ktor.withBaseApiModules
+import me.ilya40umov.kstatus.api.ktor.withErrorHandling
 import me.ilya40umov.kstatus.api.routes.apiV1Sites
 import me.ilya40umov.kstatus.conf.asPoolConfigBuilder
+import me.ilya40umov.kstatus.health.withHealthEndpoint
 import me.ilya40umov.kstatus.metrics.withMetricsModule
 import me.ilya40umov.kstatus.site.SiteRepository
 import me.ilya40umov.kstatus.site.SiteService
@@ -65,6 +67,8 @@ class Api(private val di: DI) {
         val env = applicationEngineEnvironment {
             module {
                 withBaseApiModules()
+                withErrorHandling()
+                withHealthEndpoint()
                 withMetricsModule(meterRegistry, conf.ktor.metricsPort)
                 apiV1Sites(di)
                 environment.monitor.subscribe(ApplicationStarted) {

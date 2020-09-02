@@ -31,12 +31,11 @@ subprojects {
         // BOMs
         "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.13.3"))
         "implementation"(platform("io.ktor:ktor-bom:1.4.0"))
-        // individual version constrains    q
+        // individual version constrains
         constraints {
             "implementation"("io.github.microutils:kotlin-logging:1.8.3")
             "implementation"("io.micrometer:micrometer-registry-prometheus:1.5.4")
             "implementation"("org.kodein.di:kodein-di-conf-jvm:7.0.0")
-            "implementation"("com.charleskorn.kaml:kaml:0.20.0")
             "implementation"("com.sksamuel.hoplite:hoplite-yaml:1.3.5")
             "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
             "implementation"("com.github.jasync-sql:jasync-mysql:1.1.3")

@@ -9,7 +9,7 @@ info:
     email: illia.sorokoumov@gmail.com
 
 servers:
-  - url: http://localhost:8080/api/v1/
+  - url: http://localhost:8080/api/v1
 
 tags:
   - name: Site API
@@ -229,27 +229,6 @@ components:
         totalCount:
           type: integer
           format: int32
-    FieldError:
-      type: object
-      required: [object, field, rejectedValue, message]
-      properties:
-        object:
-          oneOf:
-            - type: string
-            - $ref: "#/components/schemas/NullValue"
-        field:
-          type: string
-        rejectedValue:
-          anyOf:
-            - type: string
-            - type: number
-            - type: integer
-            - type: boolean
-            - type: array
-            - type: object
-            - $ref: "#/components/schemas/NullValue"
-        message:
-          type: string
     ApiError:
       type: object
       required: [status, message]
@@ -259,10 +238,6 @@ components:
           format: int32
         message:
           type: string
-        fieldErrors:
-          type: array
-          items:
-            $ref: "#/components/schemas/FieldError"
     ErrorPayload:
       type: object
       required: [error]
@@ -280,11 +255,6 @@ components:
             error:
               status: 400
               message: "Required parameter 'xyz' can not be null"
-              fieldErrors:
-                - object: site
-                  field: xyz
-                  rejectedValue: null
-                  message: '"xyz" must not be null'
     NotFoundError:
       description: Requested record not found
       content:

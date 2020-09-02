@@ -7,6 +7,7 @@ while keeping in mind a future deployment to AWS.
 ### Tech Stack
 
 * [Ktor](https://github.com/ktorio/ktor) as a web framework
+* [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) for working with JSON
 * [Kodein](https://github.com/Kodein-Framework/Kodein-DI) for DI
 * [Hoplite](https://github.com/sksamuel/hoplite) to load configuration files
 * [jasync-sql](https://github.com/jasync-sql/jasync-sql) to access MySQL
@@ -32,7 +33,7 @@ while keeping in mind a future deployment to AWS.
 - [x] Implement endpoints from OpenAPI spec
 - [x] Set up database migrations using FlyWay
 - [x] Implement repository layer using jasync
-- [ ] Add error handling to the API
+- [x] Add error handling to the API
 - [ ] Implement an mvp for scheduler
 - [ ] Implement an mvp for worker
 - [x] At least one test using kotest

@@ -26,3 +26,12 @@ services:
       - ./flyway/migrations:/flyway/sql
     depends_on:
       - mysql
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui"
+    ports:
+      - 8082:8080
+    volumes:
+      - ./openapi.yaml:/openapi.yaml
+    environment:
+      SWAGGER_JSON: /openapi.yaml

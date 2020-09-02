@@ -4,13 +4,14 @@ import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
-import io.ktor.response.respond
 import io.ktor.routing.delete
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.put
 import io.ktor.routing.route
 import io.ktor.routing.routing
+import me.ilya40umov.kstatus.api.ktor.respondWithError
+import me.ilya40umov.kstatus.api.ktor.respondWithPayload
 import me.ilya40umov.kstatus.site.Site
 import me.ilya40umov.kstatus.site.SiteService
 import org.kodein.di.DI
@@ -23,21 +24,21 @@ fun Application.apiV1Sites(di: DI) {
             get {
                 val limit = call.parameters["limit"]?.toIntOrNull() ?: 10
                 val offset = call.parameters["offset"]?.toIntOrNull() ?: 0
-                call.respond(mapOf("data" to siteService.listAll(offset, limit)))
+                call.respondWithPayload(data = siteService.listAll(offset, limit))
             }
             post {
                 val receivedSite = call.receive<Site>()
                 val createdSite = siteService.create(receivedSite)
-                call.respond(mapOf("data" to createdSite))
+                call.respondWithPayload(data = createdSite)
             }
             get("/{siteId}") {
                 val siteId = call.parameters["siteId"]?.toIntOrNull()
                 if (siteId == null) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respondWithError(HttpStatusCode.BadRequest, "Required parameter 'siteId' is missing.")
                 } else {
                     when (val site = siteService.findById(siteId)) {
-                        null -> call.respond(HttpStatusCode.NotFound)
-                        site -> call.respond(mapOf("data" to site))
+                        null -> call.respondWithError(HttpStatusCode.NotFound, "Site not found.")
+                        site -> call.respondWithPayload(data = site)
                     }
                 }
             }
@@ -45,22 +46,22 @@ fun Application.apiV1Sites(di: DI) {
                 val siteId = call.parameters["siteId"]?.toIntOrNull()
                 val receivedSite = call.receive<Site>()
                 if (siteId == null) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respondWithError(HttpStatusCode.BadRequest, "Required parameter 'siteId' is missing.")
                 } else {
                     when (val site = siteService.update(siteId, receivedSite)) {
-                        null -> call.respond(HttpStatusCode.NotFound)
-                        site -> call.respond(mapOf("data" to site))
+                        null -> call.respondWithError(HttpStatusCode.NotFound, "Site not found.")
+                        site -> call.respondWithPayload(data = site)
                     }
                 }
             }
             delete("/{siteId}") {
                 val siteId = call.parameters["siteId"]?.toIntOrNull()
                 if (siteId == null) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respondWithError(HttpStatusCode.BadRequest, "Required parameter 'siteId' is missing.")
                 } else {
                     when (val site = siteService.deleteById(siteId)) {
-                        null -> call.respond(HttpStatusCode.NotFound)
-                        site -> call.respond(mapOf("data" to site))
+                        null -> call.respondWithError(HttpStatusCode.NotFound, "Site not found.")
+                        site -> call.respondWithPayload(data = site)
                     }
                 }
             }

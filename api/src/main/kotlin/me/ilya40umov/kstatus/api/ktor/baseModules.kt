@@ -1,24 +1,19 @@
 package me.ilya40umov.kstatus.api.ktor
 
 import io.ktor.application.Application
-import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.features.Compression
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
-import io.ktor.features.StatusPages
 import io.ktor.features.deflate
 import io.ktor.features.gzip
 import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
 import io.ktor.request.path
-import io.ktor.response.respond
 import io.ktor.serialization.json
-import me.ilya40umov.kstatus.Messages
 import org.slf4j.event.Level
 
 fun Application.withBaseApiModules() {
@@ -34,11 +29,6 @@ fun Application.withBaseApiModules() {
             minimumSize(1024)
         }
     }
-    install(StatusPages) {
-        status(HttpStatusCode.NotFound) {
-            call.respond(HttpStatusCode.NotFound, Messages.PAGE_NOT_FOUND_MESSAGE)
-        }
-    }
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
@@ -49,11 +39,9 @@ fun Application.withBaseApiModules() {
     // XXX added this for swagger UI, may not be appropriate for production use
     install(CORS) {
         method(HttpMethod.Options)
-        method(HttpMethod.Get)
-        method(HttpMethod.Post)
         method(HttpMethod.Put)
         method(HttpMethod.Delete)
-        header(HttpHeaders.XForwardedProto)
+        header(HttpHeaders.Origin)
         anyHost()
         allowCredentials = true
         allowNonSimpleContentTypes = true

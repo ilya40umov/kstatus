@@ -40,6 +40,8 @@ subprojects {
             "implementation"("com.sksamuel.hoplite:hoplite-yaml:1.3.5")
             "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
             "implementation"("com.github.jasync-sql:jasync-mysql:1.1.3")
+            // XXX JodaTime is only here because of jasync
+            "implementation"("joda-time:joda-time:2.9.7")
         }
         // libraries that make sense for each sub-module
         "implementation"(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
@@ -48,6 +50,7 @@ subprojects {
         "testImplementation"("io.kotest:kotest-runner-junit5:$kotestVersion")
         "testImplementation"("io.kotest:kotest-assertions-core:$kotestVersion")
         "testImplementation"("io.kotest:kotest-property:$kotestVersion")
+        "testImplementation"("io.mockk:mockk:1.10.0")
     }
 
     tasks {

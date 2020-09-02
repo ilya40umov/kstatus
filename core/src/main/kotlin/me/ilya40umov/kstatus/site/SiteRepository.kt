@@ -20,6 +20,13 @@ class SiteRepository(
         }
     }
 
+    suspend fun countAll(): Int {
+        return connectionPool.useSuspending { c->
+            c.sendPreparedStatement("SELECT COUNT(*) FROM sites")
+                .rows.first().getAs(0)
+        }
+    }
+
     suspend fun findById(siteId: Int): Site? {
         return connectionPool.useSuspending { c ->
             c.sendPreparedStatement(

@@ -1,7 +1,6 @@
 package me.ilya40umov.kstatus.site
 
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 class SiteService(
     private val repository: SiteRepository
@@ -11,7 +10,7 @@ class SiteService(
         return SiteList(
             sites = repository.listAll(offset, limit),
             offset = offset,
-            totalCount = 1 // TODO calculate total count
+            totalCount = repository.countAll()
         )
     }
 

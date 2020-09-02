@@ -34,13 +34,19 @@ while keeping in mind a future deployment to AWS.
 - [x] Implement repository layer using jasync
 - [ ] Implement an mvp for scheduler
 - [ ] Implement an mvp for worker
-- [ ] At least one test using kotest
-- [ ] At least one test using mockk
-- [ ] At least one test for db layer
+- [x] At least one test using kotest
+- [x] At least one test using mockk
+- [x] At least one test for db layer
 - [ ] At least one test for API (using mock server)
 - [ ] At least one integration test for API
 - [ ] At least one integration test for the scheduler (writing to SQS)
 - [ ] At least one integration test for the worker (reading from SQS)
+
+### Encountered issues
+
+- default way to configure Ktor sucks, as it's relying on a conf file in HOCON format
+- [jasync is using JodaTime instead of java.time.*](https://github.com/jasync-sql/jasync-sql/issues/131)
+- stack traces are hard to read
 
 ### Useful links
 

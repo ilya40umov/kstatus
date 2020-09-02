@@ -15,7 +15,8 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-serialization-core")
     api("com.github.jasync-sql:jasync-mysql")
     implementation("org.apache.logging.log4j:log4j-core")
-    implementation("joda-time:joda-time:2.9.7")
+    // XXX JodaTime is only here because of jasync
+    implementation("joda-time:joda-time")
     runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl")
 }
 

@@ -6,6 +6,9 @@
         </Console>
     </appenders>
     <Loggers>
+        <Logger name="io.swagger" level="warn">
+            <AppenderRef ref="Console" />
+        </Logger>
         <Root level="info">
             <AppenderRef ref="Console" />
         </Root>

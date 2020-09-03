@@ -9,5 +9,8 @@ application {
 
 dependencies {
     implementation(project(":core"))
-    testImplementation("io.ktor:ktor-server-tests")
+    implementation("com.atlassian.oai:swagger-request-validator-core:2.11.0")
+    testImplementation("io.ktor:ktor-server-tests") {
+        exclude(group = "ch.qos.logback", module = "logback-classic")
+    }
 }

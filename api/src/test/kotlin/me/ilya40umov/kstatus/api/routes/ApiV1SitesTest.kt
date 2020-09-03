@@ -11,6 +11,8 @@ import io.mockk.mockk
 import me.ilya40umov.kstatus.api.ApiTestSpec
 import me.ilya40umov.kstatus.api.ktor.withBaseApiModules
 import me.ilya40umov.kstatus.api.ktor.withErrorHandling
+import me.ilya40umov.kstatus.api.oai.shouldBeValidAgainstOpenApi
+import me.ilya40umov.kstatus.api.oai.shouldNotBeValidAgainstOpenApi
 import me.ilya40umov.kstatus.site.Site
 import me.ilya40umov.kstatus.site.SiteList
 import me.ilya40umov.kstatus.site.SiteService
@@ -43,6 +45,7 @@ class ApiV1SitesTest : ApiTestSpec({
         )
 
         app.handleRequest(HttpMethod.Get, "/api/v1/sites").apply {
+            shouldBeValidAgainstOpenApi()
             response.status() shouldBe HttpStatusCode.OK
             response.content.shouldContainJsonKeyValue("data.totalCount", 1)
             response.content.shouldContainJsonKeyValue("data.sites[0].url", "http://a.com")
@@ -51,6 +54,7 @@ class ApiV1SitesTest : ApiTestSpec({
 
     "/api/v1/sites/{siteId} should return 400 if provided siteId is not valid" { app, _ ->
         app.handleRequest(HttpMethod.Get, "/api/v1/sites/abc").apply {
+            shouldNotBeValidAgainstOpenApi()
             response.status() shouldBe HttpStatusCode.BadRequest
             response.content shouldMatchJson """{
                 "error": {"status": 400, "message": "Required parameter 'siteId' is missing or invalid."}

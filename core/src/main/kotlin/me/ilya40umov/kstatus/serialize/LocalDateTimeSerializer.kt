@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializer
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -13,10 +15,14 @@ import java.time.format.DateTimeFormatter
 object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 
     override fun deserialize(decoder: Decoder): LocalDateTime {
-        return LocalDateTime.parse(decoder.decodeString(), DateTimeFormatter.ISO_DATE_TIME)
+        return ZonedDateTime.parse(decoder.decodeString(), DateTimeFormatter.ISO_DATE_TIME).toLocalDateTime()
     }
 
     override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(value.format(DateTimeFormatter.ISO_DATE_TIME))
+        encoder.encodeString(
+            value.atZone(ZoneId.systemDefault())
+                .withFixedOffsetZone()
+                .format(DateTimeFormatter.ISO_DATE_TIME)
+        )
     }
 }

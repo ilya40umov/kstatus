@@ -163,14 +163,6 @@ paths:
 
 components:
   schemas:
-    NullValue:
-      not:
-        anyOf:
-          - type: string
-          - type: number
-          - type: boolean
-          - type: object
-          - type: array
     StatusCheckResult:
       description: Result of a status check.
       type: string
@@ -204,9 +196,8 @@ components:
           nullable: true
         lastStatusCheckResult:
           oneOf:
-            - $ref: "#/components/schemas/NullValue"
+            - type: null
             - $ref: "#/components/schemas/StatusCheckResult"
-          example: UP
         nextScheduledFor:
           type: string
           format: date-time

@@ -1,9 +1,15 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.openapitools.generator.gradle.plugin.tasks.ValidateTask
+
 plugins {
     val kotlinVersion = "1.4.0"
     jacoco
     kotlin("jvm") version kotlinVersion apply false
     kotlin("plugin.serialization") version kotlinVersion apply false
     id("com.github.johnrengelman.shadow") version "6.0.0" apply false
+    id("org.openapi.generator") version "5.0.0-beta" apply false
 }
 
 allprojects {
@@ -43,7 +49,7 @@ subprojects {
             "implementation"("joda-time:joda-time:2.9.7")
         }
         // libraries that make sense for each sub-module
-        "implementation"(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
+        "implementation"(kotlin("stdlib", KotlinCompilerVersion.VERSION))
         // test libraries that make sense for each sub-module
         val kotestVersion = "4.2.2"
         "testImplementation"("io.kotest:kotest-runner-junit5:$kotestVersion")
@@ -54,14 +60,38 @@ subprojects {
     }
 
     tasks {
-        withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        withType<KotlinCompile> {
             kotlinOptions {
                 jvmTarget = "1.8"
                 freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.RequiresOptIn")
             }
         }
         withType<Test> {
-            useJUnitPlatform()
+            testLogging.apply {
+                events("passed", "skipped", "failed")
+                exceptionFormat = TestExceptionFormat.FULL
+                debug {
+                    showStandardStreams = true
+                }
+            }
+            useJUnitPlatform {
+                environment("ROOT_DIR", rootProject.rootDir.absolutePath)
+            }
         }
+    }
+}
+
+tasks {
+    val validateOpenApi by registering(ValidateTask::class) {
+        group = "verification"
+        description = "Validate openapi.yaml"
+        recommend.set(true)
+        input = "$rootDir/openapi.yaml"
+    }
+    val check by registering {
+        dependsOn(validateOpenApi)
+    }
+    register("build") {
+        dependsOn(check)
     }
 }

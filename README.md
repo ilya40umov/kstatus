@@ -39,7 +39,7 @@ while keeping in mind a future deployment to AWS.
 - [x] At least one test using kotest
 - [x] At least one test using mockk
 - [x] At least one test for db layer
-- [ ] At least one test for API (using mock server)
+- [x] At least one test for API (using mock server)
 - [ ] At least one integration test for API
 - [ ] At least one test validating API responses against OpenAPI spec
 - [ ] At least one integration test for the scheduler (writing to SQS)

@@ -34,7 +34,10 @@ fun Application.apiV1Sites(di: DI) {
             get("/{siteId}") {
                 val siteId = call.parameters["siteId"]?.toIntOrNull()
                 if (siteId == null) {
-                    call.respondWithError(HttpStatusCode.BadRequest, "Required parameter 'siteId' is missing.")
+                    call.respondWithError(
+                        HttpStatusCode.BadRequest,
+                        "Required parameter 'siteId' is missing or invalid."
+                    )
                 } else {
                     when (val site = siteService.findById(siteId)) {
                         null -> call.respondWithError(HttpStatusCode.NotFound, "Site not found.")

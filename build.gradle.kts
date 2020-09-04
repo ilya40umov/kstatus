@@ -37,6 +37,7 @@ subprojects {
         // BOMs
         "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.13.3"))
         "implementation"(platform("io.ktor:ktor-bom:1.4.0"))
+        "implementation"(platform("software.amazon.awssdk:bom:2.14.11"))
         // individual version constrains
         constraints {
             "implementation"("io.github.microutils:kotlin-logging:1.8.3")

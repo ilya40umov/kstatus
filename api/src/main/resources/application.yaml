@@ -1,5 +1,5 @@
-ktor:
-  shutdownTimeoutSeconds: 10
+apiPort: 8080
+metricsPort: 9090
 
 database:
   host: localhost

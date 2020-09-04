@@ -9,8 +9,9 @@ import io.ktor.server.testing.handleRequest
 import io.mockk.coEvery
 import io.mockk.mockk
 import me.ilya40umov.kstatus.api.ApiTestSpec
-import me.ilya40umov.kstatus.api.ktor.withBaseApiModules
 import me.ilya40umov.kstatus.api.ktor.withErrorHandling
+import me.ilya40umov.kstatus.ktor.withBaseApiModules
+import me.ilya40umov.kstatus.ktor.withErrorHandling
 import me.ilya40umov.kstatus.api.oai.shouldBeValidAgainstOpenApi
 import me.ilya40umov.kstatus.api.oai.shouldNotBeValidAgainstOpenApi
 import me.ilya40umov.kstatus.site.Site

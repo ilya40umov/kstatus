@@ -14,6 +14,7 @@ dependencies {
     api("com.sksamuel.hoplite:hoplite-yaml")
     api("org.jetbrains.kotlinx:kotlinx-serialization-core")
     api("com.github.jasync-sql:jasync-mysql")
+    api("software.amazon.awssdk:sqs")
     implementation("org.apache.logging.log4j:log4j-core")
     // XXX JodaTime is only here because of jasync
     implementation("joda-time:joda-time")

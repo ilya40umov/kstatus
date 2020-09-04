@@ -1,5 +1,6 @@
 package me.ilya40umov.kstatus.site
 
+import me.ilya40umov.kstatus.site.events.SiteProcessedByScheduler
 import java.time.LocalDateTime
 
 class SiteService(
@@ -49,6 +50,23 @@ class SiteService(
     suspend fun deleteById(siteId: Int): Site? {
         return repository.findById(siteId)?.also {
             repository.delete(siteId)
+        }
+    }
+
+    suspend fun listWhereNextScheduledForIsBefore(before: LocalDateTime, limit: Int): List<Site> {
+        return repository.listWhereNextScheduledForIsBefore(before, limit)
+    }
+
+    suspend fun onSitesProcessedByScheduler(processedSites: List<SiteProcessedByScheduler>) {
+        // XXX this should have been a batch operation
+        processedSites.forEach { processedSite ->
+            val site = repository.findById(processedSite.siteId)!!
+            repository.update(
+                site.copy(
+                    nextScheduledFor = processedSite.scheduledFor,
+                    lastEnqueuedAt = site.lastEnqueuedAt
+                )
+            )
         }
     }
 }

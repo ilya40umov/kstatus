@@ -7,6 +7,7 @@ import com.github.jasync.sql.db.pool.ConnectionPool
 import me.ilya40umov.kstatus.jasync.toJoda
 import me.ilya40umov.kstatus.jasync.toLocalDateTime
 import me.ilya40umov.kstatus.jasync.useSuspending
+import java.time.LocalDateTime
 
 class SiteRepository(
     private val connectionPool: ConnectionPool<MySQLConnection>
@@ -98,6 +99,15 @@ class SiteRepository(
                 query = "DELETE FROM sites WHERE site_id = ?",
                 values = listOf(siteId)
             )
+        }
+    }
+
+    suspend fun listWhereNextScheduledForIsBefore(before: LocalDateTime, limit: Int): List<Site> {
+        return connectionPool.useSuspending { c ->
+            c.sendPreparedStatement(
+                query = "SELECT * FROM sites WHERE next_scheduled_for < ? LIMIT ?",
+                values = listOf(before.toJoda(), limit)
+            ).rows.map(::toSite)
         }
     }
 

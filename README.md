@@ -34,7 +34,7 @@ while keeping in mind a future deployment to AWS.
 - [x] Set up database migrations using FlyWay
 - [x] Implement repository layer using jasync
 - [x] Add error handling to the API
-- [ ] Implement an mvp for scheduler
+- [x] Implement an mvp for scheduler
 - [ ] Implement an mvp for worker
 - [x] At least one test using kotest
 - [x] At least one test using mockk

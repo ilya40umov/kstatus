@@ -1,0 +1,15 @@
+metricsPort: 9091
+
+sqs:
+  region: us-east-1
+  endpoint-override: http://localhost:4566
+  worker-queue-url: http://localhost:4566/000000000000/sqs-worker-inbox-queue
+  credentials:
+    access-key-id: 123
+    secret-access-key: abc
+
+database:
+  host: localhost
+  database: kstatus
+  username: kstatus
+  password: kstatus123

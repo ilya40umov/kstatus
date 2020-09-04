@@ -1,4 +1,4 @@
-package me.ilya40umov.kstatus.api.ktor
+package me.ilya40umov.kstatus.ktor
 
 import io.ktor.application.Application
 import io.ktor.application.install

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+aws --region us-east-1 --endpoint-url=http://localhost:4566 "$@"

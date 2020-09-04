@@ -85,7 +85,7 @@ tasks {
     val validateOpenApi by registering(ValidateTask::class) {
         group = "verification"
         description = "Validate openapi.yaml"
-        recommend.set(true)
+        recommend.set(false)
         input = "$rootDir/openapi.yaml"
     }
     val check by registering {

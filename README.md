@@ -45,11 +45,14 @@ while keeping in mind a future deployment to AWS.
 - [ ] At least one integration test for the scheduler (writing to SQS)
 - [ ] At least one integration test for the worker (reading from SQS)
 
-### Encountered issues
+### Encountered issues & rough edges
 
 - default way to configure Ktor sucks, as it's relying on a conf file in HOCON format
+- stack traces are hard to read or missing line numbers
+- [jasync ConnectionPool's API is not super Kotlin friendly](https://github.com/jasync-sql/jasync-sql/issues/184)
 - [jasync is using JodaTime instead of java.time.*](https://github.com/jasync-sql/jasync-sql/issues/131)
-- stack traces are hard to read
+- [swagger-request-validator has no out-of-the-box support for Ktor](https://bitbucket.org/atlassian/swagger-request-validator/issues/297/ktor-support)
+- had to add [ApiTestSpec](https://github.com/ilya40umov/kstatus/blob/master/api/src/test/kotlin/me/ilya40umov/kstatus/api/ApiTestSpec.kt) to be able to write boilerplate free API tests
 
 ### Useful links
 

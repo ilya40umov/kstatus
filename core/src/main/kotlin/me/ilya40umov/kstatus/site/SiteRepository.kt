@@ -22,7 +22,7 @@ class SiteRepository(
     }
 
     suspend fun countAll(): Int {
-        return connectionPool.useSuspending { c->
+        return connectionPool.useSuspending { c ->
             c.sendPreparedStatement("SELECT COUNT(*) FROM sites")
                 .rows.first().getAs(0)
         }
@@ -84,7 +84,7 @@ class SiteRepository(
                     site.createdAt.toJoda(),
                     site.checkIntervalSeconds,
                     site.lastCheckedAt?.toJoda(),
-                    site.lastStatusCheckResult,
+                    site.lastStatusCheckResult?.name,
                     site.nextScheduledFor?.toJoda(),
                     site.lastEnqueuedAt?.toJoda(),
                     site.siteId

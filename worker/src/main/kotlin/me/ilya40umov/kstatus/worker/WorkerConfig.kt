@@ -1,11 +1,11 @@
-package me.ilya40umov.kstatus.scheduler
+package me.ilya40umov.kstatus.worker
 
 import me.ilya40umov.kstatus.conf.DatabaseConfig
 import me.ilya40umov.kstatus.conf.KtorConfig
-import me.ilya40umov.kstatus.scheduler.sitecheck.SiteCheckConfig
 import me.ilya40umov.kstatus.sqs.SqsConfig
+import me.ilya40umov.kstatus.worker.sitecheck.SiteCheckConfig
 
-data class SchedulerConfig(
+data class WorkerConfig(
     val metricsPort: Int,
     val ktor: KtorConfig = KtorConfig(),
     val database: DatabaseConfig,

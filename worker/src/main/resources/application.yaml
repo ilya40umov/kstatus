@@ -1,4 +1,4 @@
-metricsPort: 9091
+metricsPort: 9092
 
 sqs:
   region: us-east-1
@@ -14,4 +14,5 @@ database:
   password: kstatus123
 
 siteCheck:
+  processors: 5
   sqs-queue-url: http://localhost:4566/000000000000/sqs-worker-inbox-queue

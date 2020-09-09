@@ -8,7 +8,6 @@ import java.net.URI
 data class SqsConfig(
     val region: String,
     val endpointOverride: String?,
-    val workerQueueUrl: String,
     val credentials: AwsCredentials
 )
 

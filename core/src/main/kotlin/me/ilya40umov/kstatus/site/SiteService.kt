@@ -69,4 +69,14 @@ class SiteService(
             )
         }
     }
+
+    suspend fun updateSiteCheckResult(siteId: Int, checkResult: StatusCheckResult) {
+        val site = repository.findById(siteId)!!
+        repository.update(
+            site.copy(
+                lastStatusCheckResult = checkResult,
+                lastCheckedAt = LocalDateTime.now()
+            )
+        )
+    }
 }

@@ -35,13 +35,13 @@ while keeping in mind a future deployment to AWS.
 - [x] Implement repository layer using jasync
 - [x] Add error handling to the API
 - [x] Implement an mvp for scheduler
-- [ ] Implement an mvp for worker
+- [x] Implement an mvp for worker
 - [x] At least one test using kotest
 - [x] At least one test using mockk
 - [x] At least one test for db layer
 - [x] At least one test for API (using mock server)
-- [ ] At least one integration test for API
 - [x] At least one test validating API responses against OpenAPI spec
+- [ ] At least one integration test for API
 - [ ] At least one integration test for the scheduler (writing to SQS)
 - [ ] At least one integration test for the worker (reading from SQS)
 
@@ -64,3 +64,4 @@ while keeping in mind a future deployment to AWS.
 
 - [Official Coroutines Guide](https://kotlinlang.org/docs/reference/coroutines/coroutines-guide.html)
 - [Why exception handling with Kotlin Coroutines is so hard and how to successfully master it!](https://www.lukaslechner.com/why-exception-handling-with-kotlin-coroutines-is-so-hard-and-how-to-successfully-master-it/)
+- [SQS Consumer Using Kotlin Coroutines](https://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/)

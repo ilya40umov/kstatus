@@ -8,18 +8,12 @@ import com.atlassian.oai.validator.model.SimpleResponse
 import com.atlassian.oai.validator.report.JsonValidationReportFormat
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.ktor.request.contentType
 import io.ktor.request.path
 import io.ktor.server.testing.TestApplicationCall
 import io.ktor.server.testing.TestApplicationRequest
 import io.ktor.server.testing.TestApplicationResponse
-import io.ktor.util.toByteArray
-import kotlinx.coroutines.runBlocking
-
-fun TestApplicationCall.shouldBeValidAgainstOpenApi() = this shouldBe validAgainstOpenApi()
-fun TestApplicationCall.shouldNotBeValidAgainstOpenApi() = this shouldNotBe validAgainstOpenApi()
+import me.ilya40umov.kstatus.api.testing.RequestByteReadChannel
 
 fun validAgainstOpenApi(): Matcher<TestApplicationCall> = object : Matcher<TestApplicationCall> {
     override fun test(value: TestApplicationCall): MatcherResult {
@@ -45,7 +39,11 @@ private val apiValidator: OpenApiInteractionValidator by lazy {
 private fun TestApplicationRequest.toValidatorRequest(): Request {
     val builder = SimpleRequest.Builder(method.value, path())
     builder.withContentType(contentType().run { "$contentType/$contentSubtype" })
-    runBlocking { builder.withBody(bodyChannel.toByteArray().decodeToString()) }
+    // unfortunately this gives back "" as the channel is already terminated
+    // runBlocking { builder.withBody(bodyChannel.toByteArray().decodeToString()) }
+    (bodyChannel as? RequestByteReadChannel)?.also {
+        builder.withBody(it.body)
+    }
     headers.entries().forEach { (name, value) ->
         builder.withHeader(name, value)
     }

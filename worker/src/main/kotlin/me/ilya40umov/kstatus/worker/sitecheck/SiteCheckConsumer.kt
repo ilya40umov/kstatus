@@ -1,10 +1,19 @@
 package me.ilya40umov.kstatus.worker.sitecheck
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.future.await
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import me.ilya40umov.kstatus.site.events.SiteCheckRequested
@@ -16,9 +25,9 @@ import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 private val logger = KotlinLogging.logger {}
 
 class SiteCheckConsumer(
-        private val config: SiteCheckConfig,
-        private val sqsClient: SqsAsyncClient,
-        private val handler: SiteCheckHandler
+    private val config: SiteCheckConfig,
+    private val sqsClient: SqsAsyncClient,
+    private val handler: SiteCheckHandler
 ) {
     private val supervisorJob = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + supervisorJob)
@@ -36,10 +45,10 @@ class SiteCheckConsumer(
     private fun CoroutineScope.launchSqsPoller(channel: SendChannel<SqsMessage<SiteCheckRequested>>) = launch {
         repeatUntilCancelled {
             val receiveRequest = ReceiveMessageRequest.builder()
-                    .queueUrl(config.sqsQueueUrl)
-                    .waitTimeSeconds(SQS_WAIT_TIME_SECONDS)
-                    .maxNumberOfMessages(SQS_MAX_MESSAGES)
-                    .build()
+                .queueUrl(config.sqsQueueUrl)
+                .waitTimeSeconds(SQS_WAIT_TIME_SECONDS)
+                .maxNumberOfMessages(SQS_MAX_MESSAGES)
+                .build()
 
             val response = sqsClient.receiveMessage(receiveRequest).await()
             if (response.hasMessages()) {

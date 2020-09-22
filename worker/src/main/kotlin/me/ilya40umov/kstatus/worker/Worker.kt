@@ -80,12 +80,13 @@ class Worker(di: DI) {
 
     private fun startConsumersAndWait() = runBlocking {
         val siteCheckJob = siteCheckConsumer.start()
-        Runtime.getRuntime().addShutdownHook(object : Thread() {
-            override fun run() {
-                siteCheckConsumer.stop()
+        Runtime.getRuntime().addShutdownHook(
+            object : Thread() {
+                override fun run() {
+                    siteCheckConsumer.stop()
+                }
             }
-        })
+        )
         joinAll(siteCheckJob)
     }
-
 }

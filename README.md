@@ -52,6 +52,7 @@ while keeping in mind a future deployment to AWS.
 - [jasync ConnectionPool's API is not super Kotlin friendly](https://github.com/jasync-sql/jasync-sql/issues/184)
 - [jasync is using JodaTime instead of java.time.*](https://github.com/jasync-sql/jasync-sql/issues/131)
 - [swagger-request-validator has no out-of-the-box support for Ktor](https://bitbucket.org/atlassian/swagger-request-validator/issues/297/ktor-support)
+- [Ktor does not support reading request body in tests](https://youtrack.jetbrains.com/issue/KTOR-1066)
 - had to add [ApiTestSpec](https://github.com/ilya40umov/kstatus/blob/master/api/src/test/kotlin/me/ilya40umov/kstatus/api/ApiTestSpec.kt) to be able to write boilerplate free API tests
 
 ### Useful links

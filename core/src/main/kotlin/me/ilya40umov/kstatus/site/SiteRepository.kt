@@ -40,7 +40,8 @@ class SiteRepository(
     suspend fun insert(site: Site): Int {
         return connectionPool.useSuspending { c ->
             val res = c.sendPreparedStatement(
-                query = """
+                query =
+                    """
                     INSERT INTO sites (
                         url, 
                         created_at, 
@@ -50,7 +51,7 @@ class SiteRepository(
                         next_scheduled_for, 
                         last_enqueued_at
                     ) VALUES (?, ?, ?, ?, ?, ?, ?)
-                """.trimIndent(),
+                    """.trimIndent(),
                 values = listOf(
                     site.url,
                     site.createdAt.toJoda(),
@@ -68,7 +69,8 @@ class SiteRepository(
     suspend fun update(site: Site) {
         connectionPool.useSuspending { c ->
             c.sendPreparedStatement(
-                query = """
+                query =
+                    """
                     UPDATE sites SET
                         url = ?, 
                         created_at = ?, 
@@ -78,7 +80,7 @@ class SiteRepository(
                         next_scheduled_for = ?, 
                         last_enqueued_at = ?
                     WHERE site_id = ?
-                """.trimIndent(),
+                    """.trimIndent(),
                 values = listOf(
                     site.url,
                     site.createdAt.toJoda(),

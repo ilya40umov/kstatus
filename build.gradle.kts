@@ -1,6 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import org.openapitools.generator.gradle.plugin.tasks.ValidateTask
 
 plugins {
@@ -10,6 +11,7 @@ plugins {
     kotlin("plugin.serialization") version kotlinVersion apply false
     id("com.github.johnrengelman.shadow") version "6.0.0" apply false
     id("org.openapi.generator") version "5.0.0-beta" apply false
+    id("org.jlleitschuh.gradle.ktlint") version "9.4.0"
 }
 
 allprojects {
@@ -27,6 +29,7 @@ subprojects {
     apply<JacocoPlugin>()
     plugins.apply("org.jetbrains.kotlin.jvm")
     plugins.apply("org.jetbrains.kotlin.plugin.serialization")
+    plugins.apply("org.jlleitschuh.gradle.ktlint")
 
     configure<JavaPluginConvention> {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -79,6 +82,28 @@ subprojects {
                 environment("ROOT_DIR", rootProject.rootDir.absolutePath)
             }
         }
+    }
+
+    ktlint {
+        verbose.set(true)
+        outputColorName.set("RED")
+        enableExperimentalRules.set(true)
+        disabledRules.set(setOf("final-newline"))
+        reporters {
+            reporter(ReporterType.CHECKSTYLE)
+            reporter(ReporterType.HTML)
+        }
+        filter {
+            exclude("**.kts")
+            exclude("**/*Test.kt")
+        }
+    }
+
+}
+
+ktlint {
+    filter {
+        exclude("**.kts")
     }
 }
 

@@ -26,19 +26,21 @@ class SiteCheckQueue(
             val sendBatchResponses = sitesToEnqueue.chunked(SQS_BATCH_SIZE).map {
                 sqsClient.sendMessageBatch { req ->
                     req.queueUrl(config.sqsQueueUrl)
-                    req.entries(sitesToEnqueue.map { site ->
-                        SendMessageBatchRequestEntry
-                            .builder()
-                            .id(site.siteId.toString())
-                            .messageBody(
-                                Json.encodeToString(
-                                    SiteCheckRequested(
-                                        siteId = site.siteId,
-                                        deadline = iterationStartedAt.plusSeconds(site.checkIntervalSeconds.toLong())
+                    req.entries(
+                        sitesToEnqueue.map { site ->
+                            SendMessageBatchRequestEntry
+                                .builder()
+                                .id(site.siteId.toString())
+                                .messageBody(
+                                    Json.encodeToString(
+                                        SiteCheckRequested(
+                                            siteId = site.siteId,
+                                            deadline = iterationStartedAt.plusSeconds(site.checkIntervalSeconds.toLong())
+                                        )
                                     )
-                                )
-                            ).build()
-                    })
+                                ).build()
+                        }
+                    )
                 }.asDeferred()
             }
             sendBatchResponses.flatMap { deferred ->
@@ -61,5 +63,4 @@ class SiteCheckQueue(
     companion object {
         const val SQS_BATCH_SIZE = 10 // SQS supports up to 10 messages per batch
     }
-
 }

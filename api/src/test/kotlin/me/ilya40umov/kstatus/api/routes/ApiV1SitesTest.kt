@@ -68,12 +68,14 @@ class ApiV1SitesTest : ApiTestSpec({
         val siteService by di.instance<SiteService>()
         coEvery { siteService.create(any()) } returns site
         app.handleJsonRequest(HttpMethod.Post, "/api/v1/sites/") {
-            withJsonBody("""{
+            withJsonBody(
+                """{
                 "siteId": 0,
                 "url": "http://www.google.com",
                 "createdAt": "2020-09-07T11:11:11Z",
                 "checkIntervalSeconds": 60       
-            }""".trimIndent())
+            }""".trimIndent()
+            )
         }.apply {
             this shouldNotBe validAgainstOpenApi()
             response.status() shouldBe HttpStatusCode.OK
